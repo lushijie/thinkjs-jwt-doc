@@ -210,7 +210,6 @@ module.exports = class extends think.Logic {
 ```
 
 这样一个验证就完成了！ 
-
 如果该 Logic 中的所有 action 都需要进行验证，只需要给 __before 加 deractor 就可以了，其他的 action 就不用加了！
 
 
