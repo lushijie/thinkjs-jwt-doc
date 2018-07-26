@@ -11,19 +11,20 @@ jwt-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibHVzaGlqaWUiLCJpYXQiO
 
 其中：
 
+`
   header = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9,
   payload = eyJuYW1lIjoibHVzaGlqaWUiLCJpYXQiOjE1MzI1OTUyNTUsImV4cCI6MTUzMjU5NTI3MH0;
   signature = WZ9_poToN9llFFUfkswcpTljRDjF4JfZcmqYS0JcKO8;
+`
 
-
-1. header
+1.header
 header 是对类型和哈希算法进行base64Encode之后得到的。对于比例中的header进行base64Decode可以得到：
 {
   "alg":"HS256”,
   "typ":”JWT"
 }
 
-2. payload
+2.payload
 payload 是对我们需要传输的信息进行base64Encode之后得到的。对于本例中的payload进行base64Decode可以得到：
 {
   "name":"lushijie”,
@@ -33,18 +34,18 @@ payload 是对我们需要传输的信息进行base64Encode之后得到的。对
 本例中的iat, exp 是 koa-jwt 中的默认字段，初此之外 JWT 标准中注册的非强制使用的声明还有 jti，iss等，有兴趣的小伙伴可以查看更多的相关标准。
 由于 payload 可以在客户端解码获得，所以不建议在 payload 中存放敏感信息，例如用户的密码。
 
-3. signature
+3.signature
 signature 包含了 header，payload 和 密钥，计算公式如下：
 
+```
 const encodedString = base64Encode(header) + "." + base64Encode(payload);
-signature = HMACSHA256(encodedString, '密钥');
-
+let signature = HMACSHA256(encodedString, '密钥');
+```
 这里密钥是保存在服务端的，客户端是不知道的。
 
 ## 二、JWT 验证
 
 对于验证一个 JWT 是否有效也是比较简单的，服务端根据前面介绍的计算方法计算出 signature，和要校验的JWT中的 signature 部分进行对比就可以了，如果 signature 部分相等则是一个有效的 JWT。
-
 
 ### 三、 JWT 在 ThinkJS3 中的实践
 
